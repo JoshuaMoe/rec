@@ -15,6 +15,5 @@ INDEX VERSION 1.131+C:\Users\moeckelmann.PDS\Desktop\recursion\.metadata\.plugin
 2327184759.index
 3688233713.index
 3173990942.index
-314373747.index
 146530134.index
 1713295793.index
