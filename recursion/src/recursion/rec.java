@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 public class rec extends JFrame{
 	public static JFrame frame = new JFrame();
@@ -63,6 +64,7 @@ public class rec extends JFrame{
 				try {
 					rec frame = new rec();
 					frame.setVisible(true);
+					frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -604,7 +606,6 @@ public class rec extends JFrame{
 		}
 		
 		if(koch || kochf){
-			//Da die Kurve größer wird muss sie in X und Y Richtung in Abhängigkeit von der Tiefe oder Stufe verschoben werden
 			x = 200;
 			y = 600;
 			
@@ -619,14 +620,14 @@ public class rec extends JFrame{
 				x = 400;
 				y = 400;
 				länge = (Math.pow(0.33333333333, stufe))*1000+1;
-				int x2 = (int) ((Math.pow(.33333333333, stufe))*100+1);
-				int x3 = x;
+				int x2 = (int) ( ((Math.pow(1.33333333333, 1))*245+1)+(Math.pow(0.5*Math.E,stufe*1.5)*5));
+				int x3 = 0;
 				koch(stufe,(Graphics2D)g.create());
 				g.translate(x2, 0);
-				g.rotate(Math.toRadians(120), x3, y);
+				g.rotate(Math.toRadians(120), x, y);
 				koch(stufe,(Graphics2D)g.create());
 				g.translate(x2, 0);
-				g.rotate(Math.toRadians(120), x3, y);
+				g.rotate(Math.toRadians(120), x, y);
 				koch(stufe,(Graphics2D)g.create());
 			}
 			
@@ -749,7 +750,7 @@ public class rec extends JFrame{
 	public void koch (int tiefe, Graphics2D g){
 		if (tiefe <= 1){
 			g.drawLine(x, y, (int) (x+Math.round(länge)), y);
-			x+=länge;
+			g.translate(länge,0);
 		}else{
 			koch(tiefe-1,g);
 			g.rotate(Math.toRadians(-60), x, y);
