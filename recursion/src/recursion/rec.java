@@ -33,6 +33,7 @@ public class rec extends JFrame{
 	//Um mit einem bestimmten zu beginnen den gewünschten auf wahr setzen 
 	//Wenn der zufall ausgeschlossen werden soll einfach next auskommentieren
 	boolean koch = false;
+	boolean kochf = false;
 	boolean levyc = false;
 	boolean drachen = false;
 	boolean hilbert = false;
@@ -43,6 +44,7 @@ public class rec extends JFrame{
 	boolean pp = false;
 	
 	JButton btnkoch;
+	JButton btnkochf;
 	JButton btndrachen;
 	JButton btnlevyc;
 	JButton btnhilbert;
@@ -97,6 +99,16 @@ public class rec extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				koch = true;
+				btn_v();
+				repaint();
+			}
+		});
+		
+		btnkochf = new JButton("Kochflocke simulieren");
+		btnkochf.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				kochf = true;
 				btn_v();
 				repaint();
 			}
@@ -172,7 +184,7 @@ public class rec extends JFrame{
 			}
 		});
 		
-		btnpp = new JButton("Penta Plexity simulieren");
+		btnpp = new JButton("Penta Plexity simulieren WIP");
 		btnpp.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -190,6 +202,7 @@ public class rec extends JFrame{
 				drachen = false;
 				hilbert = false;
 				koch = false;
+				kochf = false;
 				levyc = false;
 				pbaum = false;
 				peano = false;
@@ -200,6 +213,7 @@ public class rec extends JFrame{
 				btndrachen.setVisible(true);
 				btnhilbert.setVisible(true);
 				btnkoch.setVisible(true);
+				btnkochf.setVisible(true);
 				btnlevyc.setVisible(true);
 				btnpbaum.setVisible(true);
 				btnpeano.setVisible(true);
@@ -229,7 +243,9 @@ public class rec extends JFrame{
 		contentPane.add(btnpfeil);
 		btnsierpinski.setBounds(10,290,200,30);
 		contentPane.add(btnsierpinski);
-		btnpp.setBounds(10,330,200,30);
+		btnkochf.setBounds(10,330,200,30);
+		contentPane.add(btnkochf);
+		btnpp.setBounds(10,370,200,30);
 		contentPane.add(btnpp);
 		btnback.setBounds(10,10,200,30);
 		contentPane.add(btnback);
@@ -239,6 +255,7 @@ public class rec extends JFrame{
 		btndrachen.setVisible(false);
 		btnhilbert.setVisible(false);
 		btnkoch.setVisible(false);
+		btnkochf.setVisible(false);
 		btnlevyc.setVisible(false);
 		btnpbaum.setVisible(false);
 		btnpeano.setVisible(false);
@@ -251,7 +268,7 @@ public class rec extends JFrame{
 	public void paint (Graphics g){
 		super.paintComponents(g);
 		
-		if(koch){
+		if(koch || kochf){
 			koch_animation ((Graphics2D)g.create());
 		}
 		
@@ -286,11 +303,11 @@ public class rec extends JFrame{
 		}
 		
 		if (pp){
-			//pp(2,(Graphics2D) g.create(),(Graphics2D) g.create());
+			pp(2,(Graphics2D) g.create(),(Graphics2D) g.create());
 		}
 	}
 	
-	/*public void pp (int tiefe, Graphics2D g,Graphics2D g3){
+	public void pp (int tiefe, Graphics2D g,Graphics2D g3){
 		g.setColor(Color.WHITE);
 		if (tiefe == 0){
 			Graphics2D g2 = (Graphics2D) g.create();
@@ -322,7 +339,7 @@ public class rec extends JFrame{
 			pp(tiefe-1,g,g3);
 			
 		}
-	}*/
+	}
 	
 	
 	
@@ -367,7 +384,7 @@ public class rec extends JFrame{
 	
 	public void pfeil_animation (Graphics2D g){
 		
-		limit = 10;
+		limit = 11;
 		
 		
 		if (stufe==1){
@@ -497,7 +514,7 @@ public class rec extends JFrame{
 	
 	public void hilbert_animation (Graphics2D g){
 		
-		limit = 10;
+		limit = 11;
 		
 		
 		if (stufe==1){
@@ -580,12 +597,13 @@ public class rec extends JFrame{
 		
 		limit = 8;
 		
+		if (kochf) limit = 5;
 		
 		if (stufe==1){
 			zeit = zeitanfang;
 		}
 		
-		if(koch){
+		if(koch || kochf){
 			//Da die Kurve größer wird muss sie in X und Y Richtung in Abhängigkeit von der Tiefe oder Stufe verschoben werden
 			x = 200;
 			y = 600;
@@ -594,7 +612,23 @@ public class rec extends JFrame{
 			länge = (Math.pow(0.33333333333, stufe))*2000+1;
 			
 			g.setColor(Color.WHITE);
-			koch(stufe,(Graphics2D)g.create());
+			
+			if (koch) koch(stufe,(Graphics2D)g.create());
+			
+			if(kochf) {
+				x = 400;
+				y = 400;
+				länge = (Math.pow(0.33333333333, stufe))*1000+1;
+				int x2 = (int) ((Math.pow(.33333333333, stufe))*100+1);
+				int x3 = x;
+				koch(stufe,(Graphics2D)g.create());
+				g.translate(x2, 0);
+				g.rotate(Math.toRadians(120), x3, y);
+				koch(stufe,(Graphics2D)g.create());
+				g.translate(x2, 0);
+				g.rotate(Math.toRadians(120), x3, y);
+				koch(stufe,(Graphics2D)g.create());
+			}
 			
 			try {
 				Thread.sleep(zeit);
@@ -618,7 +652,7 @@ public class rec extends JFrame{
 	
 	public void levyc_animation (Graphics2D g){
 		
-		limit = 18;//16 springt nicht hin und her
+		limit = 19;//16 springt nicht hin und her
 		
 		
 		if (stufe==1){
@@ -633,6 +667,7 @@ public class rec extends JFrame{
 
 			länge = 100/(stufe*1.45);
 			länge = (Math.pow(0.68965517241, stufe))*500+1;
+			
 			
 			g.setColor(Color.WHITE);
 			levyc(stufe,(Graphics2D) g.create());
@@ -713,15 +748,8 @@ public class rec extends JFrame{
 	
 	public void koch (int tiefe, Graphics2D g){
 		if (tiefe <= 1){
-			Graphics2D g2 = (Graphics2D) g.create();
-			g2.drawLine(x, y, (int) (x+Math.round(länge)), y);
+			g.drawLine(x, y, (int) (x+Math.round(länge)), y);
 			x+=länge;
-			try {
-				Thread.sleep((long) ((Math.pow(0.33, stufe))*3000));
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}else{
 			koch(tiefe-1,g);
 			g.rotate(Math.toRadians(-60), x, y);
