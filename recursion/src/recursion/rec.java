@@ -27,7 +27,7 @@ public class rec extends JFrame{
 	int limit;
 	
 	
-	//Vielleicht kommt es ja an
+	//Vielleicht ko
 	
 	
 	//Um mit einem bestimmten zu beginnen den gewünschten auf wahr setzen 
