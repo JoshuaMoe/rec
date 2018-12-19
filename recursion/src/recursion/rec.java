@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.ThreadLocalRandom;
@@ -21,9 +19,6 @@ public class rec extends JFrame{
 	
 	int stufe = 1;
 	int x = 200;
-	
-	int x2 = x;
-	
 	int y = 600;
 	int zeit = 750;
 	int zeitanfang = 750;
@@ -45,7 +40,6 @@ public class rec extends JFrame{
 	boolean peano = false;
 	boolean pfeil = false;
 	boolean sierpinski = false;
-	boolean gosper = false;
 	boolean pp = false;
 	
 	JButton btnkoch;
@@ -56,7 +50,6 @@ public class rec extends JFrame{
 	JButton btnpeano;
 	JButton btnpfeil;
 	JButton btnsierpinski;
-	JButton btngosper;
 	JButton btnpp;
 	JButton btnback;
 	
@@ -84,10 +77,7 @@ public class rec extends JFrame{
 	}
 	
 	public rec(){
-		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		int width = gd.getDisplayMode().getWidth();
-		int height = gd.getDisplayMode().getHeight();
-		setBounds (0,0,width,height);
+		setBounds (0,0,1600,800);
 		contentPane = new JPanel();
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -182,16 +172,6 @@ public class rec extends JFrame{
 			}
 		});
 		
-		btngosper= new JButton("Gosper-Kurve simulieren");
-		btngosper.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				gosper = true;
-				btn_v();
-				repaint();
-			}
-		});
-		
 		btnpp = new JButton("Penta Plexity simulieren");
 		btnpp.addActionListener(new ActionListener() {
 			@Override
@@ -215,7 +195,6 @@ public class rec extends JFrame{
 				peano = false;
 				pfeil = false;
 				sierpinski = false;
-				gosper = false;
 				pp = false;
 				
 				btndrachen.setVisible(true);
@@ -226,7 +205,6 @@ public class rec extends JFrame{
 				btnpeano.setVisible(true);
 				btnpfeil.setVisible(true);
 				btnsierpinski.setVisible(true);
-				btngosper.setVisible(true);
 				btnpp.setVisible(true);
 				
 				btnback.setVisible(false);
@@ -251,9 +229,7 @@ public class rec extends JFrame{
 		contentPane.add(btnpfeil);
 		btnsierpinski.setBounds(10,290,200,30);
 		contentPane.add(btnsierpinski);
-		btngosper.setBounds(10,330,200,30);
-		contentPane.add(btngosper);
-		btnpp.setBounds(10,370,200,30);
+		btnpp.setBounds(10,330,200,30);
 		contentPane.add(btnpp);
 		btnback.setBounds(10,10,200,30);
 		contentPane.add(btnback);
@@ -268,7 +244,6 @@ public class rec extends JFrame{
 		btnpeano.setVisible(false);
 		btnpfeil.setVisible(false);
 		btnsierpinski.setVisible(false);
-		btngosper.setVisible(false);
 		btnpp.setVisible(false);
 		btnback.setVisible(true);
 	}
@@ -308,10 +283,6 @@ public class rec extends JFrame{
 		if (sierpinski){
 			sier_animation((Graphics2D) g.create());
 			
-		}
-		
-		if (gosper) {
-			gosper_kurve();
 		}
 		
 		if (pp){
@@ -354,9 +325,7 @@ public class rec extends JFrame{
 	}*/
 	
 	
-	public void gosper_kurve(){
-		
-	}
+	
 	
 	public void sier_animation (Graphics2D g){
 		
@@ -624,15 +593,7 @@ public class rec extends JFrame{
 			länge = 50/(stufe*3);
 			länge = (Math.pow(0.33333333333, stufe))*2000+1;
 			
-			
-			x2 = (int) (((Math.pow(0.33333333333, 1))*2000));
 			g.setColor(Color.WHITE);
-			koch(stufe,(Graphics2D)g.create());
-			g.translate(x2, 0);
-			g.rotate(Math.toRadians(120), x, y);
-			koch(stufe,(Graphics2D)g.create());
-			g.translate(x2, 0);
-			g.rotate(Math.toRadians(120), x, y);
 			koch(stufe,(Graphics2D)g.create());
 			
 			try {
@@ -649,7 +610,6 @@ public class rec extends JFrame{
 			if (stufe+1==limit){
 				stufe = 0;
 			}
-			x2 = x;
 			stufe++;
 			repaint();
 		}
@@ -753,8 +713,15 @@ public class rec extends JFrame{
 	
 	public void koch (int tiefe, Graphics2D g){
 		if (tiefe <= 1){
-			g.drawLine(x, y, (int) (x+Math.round(länge)), y);
+			Graphics2D g2 = (Graphics2D) g.create();
+			g2.drawLine(x, y, (int) (x+Math.round(länge)), y);
 			x+=länge;
+			try {
+				Thread.sleep((long) ((Math.pow(0.33, stufe))*3000));
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}else{
 			koch(tiefe-1,g);
 			g.rotate(Math.toRadians(-60), x, y);
@@ -914,6 +881,7 @@ public class rec extends JFrame{
 		
 		double rand = ThreadLocalRandom.current().nextDouble(0, 1);
 		
+		//double rand = Math.random();
 		System.out.println(rand +"");
 		
 		if(rand<=0.15){
@@ -938,12 +906,22 @@ public class rec extends JFrame{
 }
 
 class DrawPanel extends JPanel {
+	
+	
+	
+	
+
 	public DrawPanel(){
 		
 	}
+	
 	public void paintComponent(Graphics g){
 		
 	}
+	
+	
+	
+	
 }
 		
 
