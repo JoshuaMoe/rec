@@ -27,7 +27,7 @@ public class rec extends JFrame{
 	int limit;
 	
 	
-	//Vielleicht ko
+	//Geht das auch ohne Push?
 	
 	
 	//Um mit einem bestimmten zu beginnen den gewünschten auf wahr setzen 
