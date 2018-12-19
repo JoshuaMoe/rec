@@ -13,10 +13,13 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 public class rec extends JFrame{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public static JFrame frame = new JFrame();
 	public static JPanel contentPane;
 	
@@ -940,22 +943,11 @@ public class rec extends JFrame{
 }
 
 class DrawPanel extends JPanel {
-	
-	
-	
-	
-
+	private static final long serialVersionUID = 1L;
 	public DrawPanel(){
-		
 	}
-	
 	public void paintComponent(Graphics g){
-		
 	}
-	
-	
-	
-	
 }
 		
 
