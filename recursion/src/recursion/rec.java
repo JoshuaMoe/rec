@@ -26,6 +26,10 @@ public class rec extends JFrame{
 	double länge =  20;
 	int limit;
 	
+	
+	//Vielleicht kommt es ja an
+	
+	
 	//Um mit einem bestimmten zu beginnen den gewünschten auf wahr setzen 
 	//Wenn der zufall ausgeschlossen werden soll einfach next auskommentieren
 	boolean koch = false;
