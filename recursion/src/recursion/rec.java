@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.ThreadLocalRandom;
@@ -27,8 +29,10 @@ public class rec extends JFrame{
 	double länge =  20;
 	int limit;
 	
+	GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+	int width = gd.getDisplayMode().getWidth();
+	int height = gd.getDisplayMode().getHeight();
 	
-	//Geht das auch ohne Push?
 	
 	
 	//Um mit einem bestimmten zu beginnen den gewünschten auf wahr setzen 
@@ -81,7 +85,8 @@ public class rec extends JFrame{
 	}
 	
 	public rec(){
-		setBounds (0,0,1600,800);
+		
+		setBounds (0,0,width,height);
 		contentPane = new JPanel();
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -357,8 +362,8 @@ public class rec extends JFrame{
 		
 		if(sierpinski){
 			//Da die Kurve größer wird muss sie in X und Y Richtung in Abhängigkeit von der Tiefe oder Stufe verschoben werden
-			x = 200;
-			y = 600;
+			x = width/3;
+			y = height*2/3;
 			
 			länge = 20;//(Math.pow(0.6, i))*900;
 			
@@ -386,7 +391,7 @@ public class rec extends JFrame{
 	
 	public void pfeil_animation (Graphics2D g){
 		
-		limit = 11;
+		limit = 10;
 		
 		
 		if (stufe==1){
@@ -395,8 +400,8 @@ public class rec extends JFrame{
 		
 		if(pfeil){
 			
-			x= 200;
-			y = 600;
+			x= width/3;
+			y = height*2/3;
 			
 			länge = (Math.pow(0.5, stufe))*500+1;
 			
@@ -437,8 +442,8 @@ public class rec extends JFrame{
 		
 		if(peano){
 			
-			x = 200;
-			y = 750;
+			x = width/3;
+			y = height*3/4;
 			
 			g.setColor(Color.WHITE);
 			peano (stufe,1,(Graphics2D)g.create());
@@ -480,11 +485,11 @@ public class rec extends JFrame{
 		
 		if(pbaum){
 			
-			x = 600;
-			y = 700;
 			
 			länge = Math.pow(Math.E*0.01, ((-stufe*0.1)-0.5))+40;
 			länge = (Math.pow(0.9, stufe))*300+1;
+			x = (int) ((width/2)+(länge/2));
+			y = (int) ((height/2)+(länge/2));
 			
 			g.setColor(Color.WHITE);
 			pbaum(stufe,länge,45,(Graphics2D)g.create());
@@ -516,7 +521,7 @@ public class rec extends JFrame{
 	
 	public void hilbert_animation (Graphics2D g){
 		
-		limit = 11;
+		limit = 10;
 		
 		
 		if (stufe==1){
@@ -527,8 +532,8 @@ public class rec extends JFrame{
 		
 		if(hilbert){
 			//Da die Kurve größer wird muss sie in X und Y Richtung in Abhängigkeit von der Tiefe oder Stufe verschoben werden
-			x = 200;
-			y = 600;
+			x = width/3;
+			y = height*2/3;
 			
 			länge = 65/(stufe*2);
 			länge = (Math.pow(0.5, stufe))*500+1;
@@ -566,8 +571,8 @@ public class rec extends JFrame{
 		}
 		
 		if(drachen){
-			x = 200;
-			y = 250;
+			x = width/3;
+			y = height/3;
 			
 			
 			länge = 100/(Math.sqrt(2)*stufe);
@@ -621,7 +626,6 @@ public class rec extends JFrame{
 				y = 400;
 				länge = (Math.pow(0.33333333333, stufe))*1000+1;
 				int x2 = (int) ( ((Math.pow(1.33333333333, 1))*245+1)+(Math.pow(0.5*Math.E,stufe*1.5)*5));
-				int x3 = 0;
 				koch(stufe,(Graphics2D)g.create());
 				g.translate(x2, 0);
 				g.rotate(Math.toRadians(120), x, y);
@@ -662,8 +666,8 @@ public class rec extends JFrame{
 		}
 		
 		if (levyc){
-			x = 200;
-			y = 200;
+			x = width/3;
+			y = height/2;
 			
 
 			länge = 100/(stufe*1.45);
