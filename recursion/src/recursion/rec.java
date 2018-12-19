@@ -750,7 +750,8 @@ public class rec extends JFrame{
 	public void koch (int tiefe, Graphics2D g){
 		if (tiefe <= 1){
 			g.drawLine(x, y, (int) (x+Math.round(länge)), y);
-			g.translate(länge,0);
+			if(kochf)g.translate(länge,0);
+			if(koch)x+=länge;
 		}else{
 			koch(tiefe-1,g);
 			g.rotate(Math.toRadians(-60), x, y);
