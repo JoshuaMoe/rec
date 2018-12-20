@@ -2,6 +2,7 @@ package recursion;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
@@ -15,7 +16,9 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 import javax.swing.WindowConstants;
 
 public class rec extends JFrame{
@@ -35,6 +38,7 @@ public class rec extends JFrame{
 	double länge =  20;
 	int limit;
 	int nextX = 0, nextY = 0;
+	int counter = 0;
 	
 	GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 	int width = gd.getDisplayMode().getWidth();
@@ -67,7 +71,7 @@ public class rec extends JFrame{
 	JButton btnpp;
 	JButton btnback;
 	
-	JTextField text = new JTextField();
+	JTextArea text = new JTextArea();
 	
 	
 	public static void main(String[] args) {
@@ -101,8 +105,14 @@ public class rec extends JFrame{
 		contentPane.setLayout(null);
 		contentPane.setBackground(Color.BLACK);
 		
-		text.setBounds(10,40,200,30);
+		text.setBounds(10,40,400,60);
 		contentPane.add(text);
+		Font font1 = new Font("SansSerif", Font.BOLD, 20);
+		text.setFont(font1);
+		text.setBackground(Color.BLACK);
+		text.setForeground(Color.WHITE);
+		text.setVisible(false);
+		text.setEditable(false);
 		
 		contentPane.addMouseListener(new MouseListener() {
 		    @Override
@@ -265,6 +275,7 @@ public class rec extends JFrame{
 				btnpp.setVisible(true);
 				
 				btnback.setVisible(false);
+				text.setVisible(false);
 				repaint();
 			}
 		});
@@ -306,6 +317,7 @@ public class rec extends JFrame{
 		btnsierpinski.setVisible(false);
 		btnpp.setVisible(false);
 		btnback.setVisible(true);
+		text.setVisible(true);
 	}
 	
 	public void paint (Graphics g){
@@ -604,19 +616,28 @@ public class rec extends JFrame{
 				y = height*2/3;
 			}
 			
-			
+			counter = 0;
 			länge = 65/(stufe*2);
 			länge = (Math.pow(0.5, stufe))*500+1;
 			
 			g.setColor(Color.WHITE);
 			hilbert (stufe,-1,(Graphics2D)g.create());
 			
-			try {
-				Thread.sleep(zeit);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			text.setText("Anzahl der Linien: "+counter);
+		    ActionListener listener = new ActionListener(){
+		        public void actionPerformed(ActionEvent event){
+		        	try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		        }
+		    };
+		    Timer timer = new Timer(500, listener);
+		    timer.setRepeats(false);
+		    timer.start();
+			
 			
 			
 			//Möglichkeit Animation mit der Zeit langsamer werden zu lassen
@@ -824,17 +845,20 @@ public class rec extends JFrame{
 			hilbert(tiefe-1,-1*vz,g);
 			g.drawLine(x, y, (int) (x+Math.round(länge)), y);
 			x+=länge;
+			counter++;
 			
 			g.rotate(Math.toRadians(-90*vz), x, y);
 			hilbert(tiefe-1,vz,g);
 			g.drawLine(x, y, (int) (x+Math.round(länge)), y);
 			x+=länge;
+			counter++;
 			
 			hilbert(tiefe-1,vz,g);
 			
 			g.rotate(Math.toRadians(-90*vz), x, y);
 			g.drawLine(x, y, (int) (x+Math.round(länge)), y);
 			x+=länge;
+			counter++;
 			hilbert(tiefe-1,-1*vz,g);
 			
 			g.rotate(Math.toRadians(90*vz), x, y);
@@ -1026,6 +1050,12 @@ public class rec extends JFrame{
 		repaint();
 	}
 	
+	
+	public void count() {
+		String s1 = "Stufe: "+stufe;
+		String s2 = "\n\rAnzahl der Linien:" +counter;
+		text.setText(s1+s2);
+	}
 	
 }
 
