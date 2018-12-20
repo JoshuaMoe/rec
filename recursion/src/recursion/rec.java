@@ -8,11 +8,14 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 public class rec extends JFrame{
@@ -31,6 +34,7 @@ public class rec extends JFrame{
 	int verzögerung = 0;
 	double länge =  20;
 	int limit;
+	int nextX = 0, nextY = 0;
 	
 	GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 	int width = gd.getDisplayMode().getWidth();
@@ -63,6 +67,8 @@ public class rec extends JFrame{
 	JButton btnpp;
 	JButton btnback;
 	
+	JTextField text = new JTextField();
+	
 	
 	public static void main(String[] args) {
 		
@@ -94,6 +100,30 @@ public class rec extends JFrame{
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		contentPane.setBackground(Color.BLACK);
+		
+		text.setBounds(10,40,200,30);
+		contentPane.add(text);
+		
+		contentPane.addMouseListener(new MouseListener() {
+		    @Override
+		    public void mouseClicked(MouseEvent e) {
+		    	nextX =  e.getX();
+		    	nextY =  e.getY();
+		    	System.out.println("X:"+nextX+"\nY: "+nextY);
+		    }
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+		});
 		
 		buttons();
 		
@@ -209,6 +239,9 @@ public class rec extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				stufe = 1;
+				nextX = 0;
+				nextY = 0;
+				
 				drachen = false;
 				hilbert = false;
 				koch = false;
@@ -365,8 +398,16 @@ public class rec extends JFrame{
 		
 		if(sierpinski){
 			//Da die Kurve größer wird muss sie in X und Y Richtung in Abhängigkeit von der Tiefe oder Stufe verschoben werden
-			x = width/3;
-			y = height*2/3;
+			
+			if (nextX != 0||nextY != 0) 
+			{
+				x = nextX;
+				y = nextY;
+			}else {
+				x = width/3; 
+				y = height*2/3;
+			}
+			
 			
 			länge = 20;//(Math.pow(0.6, i))*900;
 			
@@ -403,8 +444,14 @@ public class rec extends JFrame{
 		
 		if(pfeil){
 			
-			x= width/3;
-			y = height*2/3;
+			if (nextX != 0||nextY != 0) 
+			{
+				x = nextX;
+				y = nextY;
+			}else {
+				x= width/3;
+				y = height*2/3;
+			}
 			
 			länge = (Math.pow(0.5, stufe))*500+1;
 			
@@ -445,8 +492,14 @@ public class rec extends JFrame{
 		
 		if(peano){
 			
-			x = width/3;
-			y = height*3/4;
+			if (nextX != 0||nextY != 0) 
+			{
+				x = nextX;
+				y = nextY;
+			}else {
+				x = width/3;
+				y = height*3/4;
+			}
 			
 			g.setColor(Color.WHITE);
 			peano (stufe,1,(Graphics2D)g.create());
@@ -491,8 +544,16 @@ public class rec extends JFrame{
 			
 			länge = Math.pow(Math.E*0.01, ((-stufe*0.1)-0.5))+40;
 			länge = (Math.pow(0.9, stufe))*300+1;
-			x = (int) ((width/2)+(länge/2));
-			y = (int) ((height/2)+(länge/2));
+			
+			if (nextX != 0||nextY != 0) 
+			{
+				x = nextX;
+				y = nextY;
+			}else {
+				x = (int) ((width/2)+(länge/2));
+				y = (int) ((height/2)+(länge/2));
+			}
+			
 			
 			g.setColor(Color.WHITE);
 			pbaum(stufe,länge,45,(Graphics2D)g.create());
@@ -534,9 +595,15 @@ public class rec extends JFrame{
 		}
 		
 		if(hilbert){
-			//Da die Kurve größer wird muss sie in X und Y Richtung in Abhängigkeit von der Tiefe oder Stufe verschoben werden
-			x = width/3;
-			y = height*2/3;
+			if (nextX != 0||nextY != 0) 
+			{
+				x = nextX;
+				y = nextY;
+			}else {
+				x = width/3;
+				y = height*2/3;
+			}
+			
 			
 			länge = 65/(stufe*2);
 			länge = (Math.pow(0.5, stufe))*500+1;
@@ -574,9 +641,15 @@ public class rec extends JFrame{
 		}
 		
 		if(drachen){
-			x = width/3;
-			y = height/3;
 			
+			if (nextX != 0||nextY != 0) 
+			{
+				x = nextX;
+				y = nextY;
+			}else {
+				x = width/3;
+				y = height/3;
+			}
 			
 			länge = 100/(Math.sqrt(2)*stufe);
 			länge = (Math.pow(0.70710678118, stufe))*500+1;
@@ -614,8 +687,15 @@ public class rec extends JFrame{
 		}
 		
 		if(koch || kochf){
-			x = 200;
-			y = 600;
+			
+			if (nextX != 0||nextY != 0) 
+			{
+				x = nextX;
+				y = nextY;
+			}else {
+				x = 200;
+				y = 600;
+			}
 			
 			länge = 50/(stufe*3);
 			länge = (Math.pow(0.33333333333, stufe))*2000+1;
@@ -669,8 +749,15 @@ public class rec extends JFrame{
 		}
 		
 		if (levyc){
-			x = width/3;
-			y = height/2;
+			
+			if (nextX != 0||nextY != 0) 
+			{
+				x = nextX;
+				y = nextY;
+			}else {
+				x = width/3;
+				y = height/2;
+			}
 			
 
 			länge = 100/(stufe*1.45);
@@ -949,5 +1036,7 @@ class DrawPanel extends JPanel {
 	public void paintComponent(Graphics g){
 	}
 }
+
+
 		
 
