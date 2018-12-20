@@ -13,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.concurrent.ThreadLocalRandom;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -306,6 +307,7 @@ public class rec extends JFrame{
 	}
 	
 	public void btn_v (){
+		stufe = 1;
 		btndrachen.setVisible(false);
 		btnhilbert.setVisible(false);
 		btnkoch.setVisible(false);
@@ -420,28 +422,28 @@ public class rec extends JFrame{
 				y = height*2/3;
 			}
 			
-			
+			counter = 0;
 			länge = 20;//(Math.pow(0.6, i))*900;
 			
 			g.setColor(Color.WHITE);
 			sierpinski(stufe,false,(Graphics2D) g.create());
 			
-			try {
-				Thread.sleep(zeit);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			count();
 			
-			
-			//Möglichkeit Animation mit der Zeit langsamer werden zu lassen
-			zeit = zeit+verzögerung;
-			
-			if (stufe+1==limit){
-				stufe = 0;
-			}
-			stufe++;
-			repaint();
+			Timer timer = new Timer(zeit, new AbstractAction() {
+			    @Override
+			    public void actionPerformed(ActionEvent ae) {
+			    	zeit = zeit+verzögerung;
+					
+					if (stufe+1==limit){
+						stufe = 0;
+					}
+					stufe++;
+					repaint();
+			    }
+			});
+			timer.setRepeats(false);
+			timer.start();
 		}
 	}
 	
@@ -465,27 +467,28 @@ public class rec extends JFrame{
 				y = height*2/3;
 			}
 			
+			counter = 0;
 			länge = (Math.pow(0.5, stufe))*500+1;
 			
 			g.setColor(Color.WHITE);
 			pfeil (stufe,1,(Graphics2D)g.create());
 			
-			try {
-				Thread.sleep(zeit);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			count();
 			
-			
-			//Möglichkeit Animation mit der Zeit langsamer werden zu lassen
-			zeit = zeit+verzögerung;
-			
-			if (stufe+1==limit){
-				stufe = 0;
-			}
-			stufe++;
-			repaint();
+			Timer timer = new Timer(zeit, new AbstractAction() {
+			    @Override
+			    public void actionPerformed(ActionEvent ae) {
+			    	zeit = zeit+verzögerung;
+					
+					if (stufe+1==limit){
+						stufe = 0;
+					}
+					stufe++;
+					repaint();
+			    }
+			});
+			timer.setRepeats(false);
+			timer.start();
 		}
 	}
 	
@@ -513,28 +516,28 @@ public class rec extends JFrame{
 				y = height*3/4;
 			}
 			
+			counter = 0;
+			
 			g.setColor(Color.WHITE);
 			peano (stufe,1,(Graphics2D)g.create());
 			
-			try {
-				Thread.sleep(zeit);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			count();
 			
-			//Länge wird über e funktion ausgerechnet sprünge durch int Rundung
-			länge = Math.pow(Math.E*0.5, ((-stufe*0.8)+12))-11;
-			//stufe oder tiefe wird erhöht
-			
-			//Möglichkeit Animation mit der Zeit langsamer werden zu lassen
-			zeit = zeit+verzögerung;
-			
-			if (stufe+1==limit){
-				stufe = 0;
-			}
-			stufe++;
-			repaint();
+			Timer timer = new Timer(zeit, new AbstractAction() {
+			    @Override
+			    public void actionPerformed(ActionEvent ae) {
+			    	länge = Math.pow(Math.E*0.5, ((-stufe*0.8)+12))-11;
+			    	zeit = zeit+verzögerung;
+					
+					if (stufe+1==limit){
+						stufe = 0;
+					}
+					stufe++;
+					repaint();
+			    }
+			});
+			timer.setRepeats(false);
+			timer.start();
 		}
 	}
 	
@@ -566,29 +569,26 @@ public class rec extends JFrame{
 				y = (int) ((height/2)+(länge/2));
 			}
 			
-			
+			counter = 0;
 			g.setColor(Color.WHITE);
 			pbaum(stufe,länge,45,(Graphics2D)g.create());
 			
-			try {
-				Thread.sleep(zeit);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			count();
 			
-			//Länge wird über e funktion ausgerechnet sprünge durch int Rundung
-			
-			//stufe oder tiefe wird erhöht
-			
-			//Möglichkeit Animation mit der Zeit langsamer werden zu lassen
-			zeit = zeit+verzögerung;
-			
-			if (stufe+1==limit){
-				stufe = 0;
-			}
-			stufe++;
-			repaint();
+			Timer timer = new Timer(zeit, new AbstractAction() {
+			    @Override
+			    public void actionPerformed(ActionEvent ae) {
+			    	zeit = zeit+verzögerung;
+					
+					if (stufe+1==limit){
+						stufe = 0;
+					}
+					stufe++;
+					repaint();
+			    }
+			});
+			timer.setRepeats(false);
+			timer.start();
 		}
 	}
 	
@@ -623,31 +623,23 @@ public class rec extends JFrame{
 			g.setColor(Color.WHITE);
 			hilbert (stufe,-1,(Graphics2D)g.create());
 			
-			text.setText("Anzahl der Linien: "+counter);
-		    ActionListener listener = new ActionListener(){
-		        public void actionPerformed(ActionEvent event){
-		        	try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+			count();
+
+			Timer timer = new Timer(zeit, new AbstractAction() {
+			    @Override
+			    public void actionPerformed(ActionEvent ae) {
+			    	zeit = zeit+verzögerung;
+					
+					if (stufe+1==limit){
+						stufe = 0;
 					}
-		        }
-		    };
-		    Timer timer = new Timer(500, listener);
-		    timer.setRepeats(false);
-		    timer.start();
+					stufe++;
+					repaint();
+			    }
+			});
+			timer.setRepeats(false);
+			timer.start();	
 			
-			
-			
-			//Möglichkeit Animation mit der Zeit langsamer werden zu lassen
-			zeit = zeit+verzögerung;
-			
-			if (stufe+1==limit){
-				stufe = 0;
-			}
-			stufe++;
-			repaint();
 		}
 	}
 	
@@ -672,28 +664,31 @@ public class rec extends JFrame{
 				y = height/3;
 			}
 			
+			
+			counter = 0;
+			
 			länge = 100/(Math.sqrt(2)*stufe);
 			länge = (Math.pow(0.70710678118, stufe))*500+1;
 			
 			g.setColor(Color.WHITE);
 			drachen(stufe,1,(Graphics2D)g.create());
 			
-			try {
-				Thread.sleep(zeit);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			count();
 			
-			
-			//Möglichkeit Animation mit der Zeit langsamer werden zu lassen
-			zeit = zeit+verzögerung;
-			
-			if (stufe+1==limit){
-				stufe = 0;
-			}
-			stufe++;
-			repaint();
+			Timer timer = new Timer(zeit, new AbstractAction() {
+			    @Override
+			    public void actionPerformed(ActionEvent ae) {
+			    	zeit = zeit+verzögerung;
+					
+					if (stufe+1==limit){
+						stufe = 0;
+					}
+					stufe++;
+					repaint();
+			    }
+			});
+			timer.setRepeats(false);
+			timer.start();	
 		}
 	}
 	
@@ -718,6 +713,8 @@ public class rec extends JFrame{
 				y = 600;
 			}
 			
+			counter = 0;
+			
 			länge = 50/(stufe*3);
 			länge = (Math.pow(0.33333333333, stufe))*2000+1;
 			
@@ -739,22 +736,22 @@ public class rec extends JFrame{
 				koch(stufe,(Graphics2D)g.create());
 			}
 			
-			try {
-				Thread.sleep(zeit);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			count();
 			
-			
-			//Möglichkeit Animation mit der Zeit langsamer werden zu lassen
-			zeit = zeit+verzögerung;
-			
-			if (stufe+1==limit){
-				stufe = 0;
-			}
-			stufe++;
-			repaint();
+			Timer timer = new Timer(zeit, new AbstractAction() {
+			    @Override
+			    public void actionPerformed(ActionEvent ae) {
+			    	zeit = zeit+verzögerung;
+					
+					if (stufe+1==limit){
+						stufe = 0;
+					}
+					stufe++;
+					repaint();
+			    }
+			});
+			timer.setRepeats(false);
+			timer.start();
 		}
 	}
 	
@@ -784,26 +781,26 @@ public class rec extends JFrame{
 			länge = 100/(stufe*1.45);
 			länge = (Math.pow(0.68965517241, stufe))*500+1;
 			
-			
+			counter = 0;
 			g.setColor(Color.WHITE);
 			levyc(stufe,(Graphics2D) g.create());
 			
-			try {
-				Thread.sleep(zeit);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			count();
 			
-			//Möglichkeit Animation mit der Zeit langsamer werden zu lassen
-			zeit = zeit+verzögerung;
-			
-			if (stufe+1==limit){
-				stufe = 0;
-			}
-			stufe++;
-			
-			repaint();
+			Timer timer = new Timer(zeit, new AbstractAction() {
+			    @Override
+			    public void actionPerformed(ActionEvent ae) {
+			    	zeit = zeit+verzögerung;
+					
+					if (stufe+1==limit){
+						stufe = 0;
+					}
+					stufe++;
+					repaint();
+			    }
+			});
+			timer.setRepeats(false);
+			timer.start();
 		}
 		
 	}
@@ -825,6 +822,7 @@ public class rec extends JFrame{
 			g.rotate(Math.toRadians(-120), x, y);
 			g.drawLine(x, y, (int) (x+Math.round(länge)), y);
 			g.translate(Math.round(länge), 0);
+			counter +=3;
 		}else{
 			sierpinski(tiefe-1,false,g);
 			g.rotate(Math.toRadians(-120), x, y);
@@ -862,12 +860,15 @@ public class rec extends JFrame{
 			hilbert(tiefe-1,-1*vz,g);
 			
 			g.rotate(Math.toRadians(90*vz), x, y);
+			
+			
 		}
 	}
 	
 	public void koch (int tiefe, Graphics2D g){
 		if (tiefe <= 1){
 			g.drawLine(x, y, (int) (x+Math.round(länge)), y);
+			counter++;
 			if(kochf)g.translate(länge,0);
 			if(koch)x+=länge;
 		}else{
@@ -885,6 +886,7 @@ public class rec extends JFrame{
 		if (tiefe == 0){
 			g.drawLine(x, y, (int) (x+Math.round(länge)), y);
 			x+=länge;
+			counter++;
 		}else{
 			g.rotate(Math.toRadians(45*vz), x, y);
 			drachen(tiefe-1,1,g);
@@ -898,6 +900,7 @@ public class rec extends JFrame{
 		if(tiefe==1){
 			g.drawLine(x, y, (int) (x+länge), y);
 			x+=länge;
+			counter++;
 		}else{
 			g.rotate(Math.toRadians(45), x, y);
 			levyc(tiefe-1,g);
@@ -931,6 +934,7 @@ public class rec extends JFrame{
 		
 		g.drawLine(x, y, (int) (x+Math.round(länge)), y);
 		x+=länge;
+		counter +=5;
 		
 		
 		if(tiefe-1<=0){
@@ -941,6 +945,7 @@ public class rec extends JFrame{
 			g.rotate(Math.toRadians(-90), x, y);
 			g.drawLine(x, y, (int) (x+Math.round(länge)), y);
 			x+=länge;
+			counter += 2;
 		}else{
 			g.rotate(Math.toRadians(phi), x, y);
 			pbaum(tiefe-1, länge*Math.cos(Math.toRadians(phi)),phi,g);
@@ -949,6 +954,7 @@ public class rec extends JFrame{
 			g.rotate(Math.toRadians(90-phi), x, y);
 			g.drawLine(x, y, (int) (x+Math.round(länge)), y);
 			x+=länge;
+			counter++;
 		}
 	}
 	
@@ -995,6 +1001,7 @@ public class rec extends JFrame{
 			x+=länge;
 			
 			peano(tiefe-1,vz,g);
+			counter +=8;
 		}
 		
 	}
@@ -1004,6 +1011,7 @@ public class rec extends JFrame{
 		if (tiefe == 0){
 			g.drawLine(x, y, (int) (x+Math.round(länge)), y);
 			x+=länge;
+			counter++;
 		}else{
 			g.rotate(Math.toRadians(-60*vz), x, y);
 			pfeil(tiefe-1,-vz,g);
