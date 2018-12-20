@@ -120,7 +120,6 @@ public class rec extends JFrame{
 		    public void mouseClicked(MouseEvent e) {
 		    	nextX =  e.getX();
 		    	nextY =  e.getY();
-		    	System.out.println("X:"+nextX+"\nY: "+nextY);
 		    }
 			@Override
 			public void mouseEntered(MouseEvent e) {
