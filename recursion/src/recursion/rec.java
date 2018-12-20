@@ -23,9 +23,6 @@ import javax.swing.Timer;
 import javax.swing.WindowConstants;
 
 public class rec extends JFrame{
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	public static JFrame frame = new JFrame();
 	public static JPanel contentPane;
