@@ -57,6 +57,7 @@ public class rec extends JFrame{
 	boolean sierpinski = false;
 	boolean pp = false;
 	boolean pause = false;
+	boolean mouseclicked= false;
 	
 	JButton btnkoch;
 	JButton btnkochf;
@@ -69,6 +70,7 @@ public class rec extends JFrame{
 	JButton btnsierpinski;
 	JButton btnpp;
 	JButton btnpause;
+	JButton btnnext;
 	JButton btnback;
 	
 	JTextArea text = new JTextArea();
@@ -110,11 +112,11 @@ public class rec extends JFrame{
 		contentPane.addMouseListener(new MouseListener() {
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
+		    	mouseclicked = true;
 		    	nextX =  e.getX();
 		    	nextY =  e.getY();
 		    	
 		    	if(pause) {
-		    		stufe--;
 		    		repaint();
 		    	}
 		    }
@@ -246,9 +248,31 @@ public class rec extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				pause = !pause;
-				if (pause)btnpause.setText("Resume");
+				if (pause) {
+					btnpause.setBounds(10,10,200,30);
+					btnback.setBounds(10,90,200,30);
+					text.setBounds(10,120,400,60);
+					btnpause.setText("Resume");
+					btnnext.setVisible(true);
+				}
 				if (!pause) {
+					btnpause.setBounds(10,10,200,30);
+					btnback.setBounds(10,50,200,30);
+					text.setBounds(10,80,400,60);
 					btnpause.setText("Pause");
+					btnnext.setVisible(false);
+					repaint();
+				}
+			}
+		});
+		
+		btnnext = new JButton("Nächster");
+		btnnext.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(pause) {
+					if (stufe +1 == limit) stufe = 0;
+					stufe++;
 					repaint();
 				}
 			}
@@ -287,6 +311,7 @@ public class rec extends JFrame{
 				
 				btnpause.setVisible(false);
 				btnback.setVisible(false);
+				btnnext.setVisible(false);
 				text.setVisible(false);
 				repaint();
 			}
@@ -315,11 +340,14 @@ public class rec extends JFrame{
 		contentPane.add(btnpp);
 		btnpause.setBounds(10,10,200,30);
 		contentPane.add(btnpause);
+		btnnext.setBounds(10,50,200,30);
+		contentPane.add(btnnext);
 		btnback.setBounds(10,50,200,30);
 		contentPane.add(btnback);
 		
 		btnpause.setVisible(false);
 		btnback.setVisible(false);
+		btnnext.setVisible(false);
 	}
 	
 	public void btn_v (){
@@ -337,6 +365,10 @@ public class rec extends JFrame{
 		btnpause.setVisible(true);
 		btnback.setVisible(true);
 		text.setVisible(true);
+		btnpause.setText("Pause");
+		btnpause.setBounds(10,10,200,30);
+		btnback.setBounds(10,50,200,30);
+		text.setBounds(10,80,400,60);
 	}
 	
 	public void paint (Graphics g){
@@ -1011,12 +1043,13 @@ public class rec extends JFrame{
 	
 	public void timer () {
 		zeit = zeit+verzögerung;
-		
-		if (stufe+1==limit){
-			stufe = 0;
+		if (!pause) {
+			if (stufe+1==limit){
+				stufe = 0;
+			}
+			stufe++;
+			repaint();
 		}
-		stufe++;
-		if (!pause)repaint();
 	}
 	
 	
