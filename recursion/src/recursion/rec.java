@@ -384,21 +384,20 @@ public class rec extends JFrame{
 	public void pp (int tiefe, Graphics2D g,Graphics2D g3){
 		g.setColor(Color.WHITE);
 		if (tiefe == 0){
-			Graphics2D g2 = (Graphics2D) g.create();
-			g2.drawLine(x, y, (int) (x+Math.round(länge)), y);
-			x+=länge;
-			g2.rotate(Math.toRadians(-72), x, y);
-			g2.drawLine(x, y, (int) (x+Math.round(länge)), y);
-			x+=länge;
-			g2.rotate(Math.toRadians(-72), x, y);
-			g2.drawLine(x, y, (int) (x+Math.round(länge)), y);
-			x+=länge;
-			g2.rotate(Math.toRadians(-72), x, y);
-			g2.drawLine(x, y, (int) (x+Math.round(länge)), y);
-			x+=länge;
-			g2.rotate(Math.toRadians(-72), x, y);
-			g2.drawLine(x, y, (int) (x+Math.round(länge)), y);
-			x+=länge;
+			g.drawLine(x, y, (int) (x+Math.round(länge)), y);
+			g.translate(länge,0);
+			g.rotate(Math.toRadians(-72), x, y);
+			g.drawLine(x, y, (int) (x+Math.round(länge)), y);
+			g.translate(länge,0);
+			g.rotate(Math.toRadians(-72), x, y);
+			g.drawLine(x, y, (int) (x+Math.round(länge)), y);
+			g.translate(länge,0);
+			g.rotate(Math.toRadians(-72), x, y);
+			g.drawLine(x, y, (int) (x+Math.round(länge)), y);
+			g.translate(länge,0);
+			g.rotate(Math.toRadians(-72), x, y);
+			g.drawLine(x, y, (int) (x+Math.round(länge)), y);
+			g.translate(länge,0);
 		}else{
 			pp(tiefe-1,g,g3);
 			g.rotate(Math.toRadians(-72), x, y);
