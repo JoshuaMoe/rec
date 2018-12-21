@@ -547,16 +547,17 @@ public class rec extends JFrame{
 			}
 			
 			counter = 0;
+			länge = Math.pow(Math.E*0.5, ((-(stufe-1)*0.8)+12))-11;
 			
 			g.setColor(Color.WHITE);
 			peano (stufe,1,(Graphics2D)g.create());
 			
 			count();
 			
+			
 			Timer timer = new Timer(zeit, new AbstractAction() {
 			    @Override
 			    public void actionPerformed(ActionEvent ae) {
-			    	länge = Math.pow(Math.E*0.5, ((-stufe*0.8)+12))-11;
 			    	timer();
 			    }
 			});
