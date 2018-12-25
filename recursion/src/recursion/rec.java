@@ -18,7 +18,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.WindowConstants;
 
@@ -71,6 +70,7 @@ public class rec extends JFrame{
 	JButton btnpp;
 	JButton btnpause;
 	JButton btnnext;
+	JButton btnprevious;
 	JButton btnback;
 	
 	JTextArea text = new JTextArea();
@@ -84,6 +84,7 @@ public class rec extends JFrame{
 					rec frame = new rec();
 					frame.setVisible(true);
 					frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+					frame.setTitle("Grafische Recursion");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -250,10 +251,11 @@ public class rec extends JFrame{
 				pause = !pause;
 				if (pause) {
 					btnpause.setBounds(10,10,200,30);
-					btnback.setBounds(10,90,200,30);
-					text.setBounds(10,120,400,60);
+					btnback.setBounds(10,130,200,30);
+					text.setBounds(10,160,400,60);
 					btnpause.setText("Resume");
 					btnnext.setVisible(true);
+					btnprevious.setVisible(true);
 				}
 				if (!pause) {
 					btnpause.setBounds(10,10,200,30);
@@ -261,6 +263,7 @@ public class rec extends JFrame{
 					text.setBounds(10,80,400,60);
 					btnpause.setText("Pause");
 					btnnext.setVisible(false);
+					btnprevious.setVisible(false);
 					repaint();
 				}
 			}
@@ -278,7 +281,19 @@ public class rec extends JFrame{
 			}
 		});
 		
-		btnback = new JButton("Zurück");
+		btnprevious = new JButton("Vorheriger");
+		btnprevious.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(pause) {
+					stufe--;
+					if (stufe == 0) stufe = limit-1;
+					repaint();
+				}
+			}
+		});
+		
+		btnback = new JButton("Zurück zur Auswahl");
 		btnback.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -312,6 +327,7 @@ public class rec extends JFrame{
 				btnpause.setVisible(false);
 				btnback.setVisible(false);
 				btnnext.setVisible(false);
+				btnprevious.setVisible(false);
 				text.setVisible(false);
 				repaint();
 			}
@@ -342,12 +358,15 @@ public class rec extends JFrame{
 		contentPane.add(btnpause);
 		btnnext.setBounds(10,50,200,30);
 		contentPane.add(btnnext);
+		btnprevious.setBounds(10,90,200,30);
+		contentPane.add(btnprevious);
 		btnback.setBounds(10,50,200,30);
 		contentPane.add(btnback);
 		
 		btnpause.setVisible(false);
 		btnback.setVisible(false);
 		btnnext.setVisible(false);
+		btnprevious.setVisible(false);
 	}
 	
 	public void btn_v (){
@@ -547,17 +566,17 @@ public class rec extends JFrame{
 			}
 			
 			counter = 0;
-			länge = Math.pow(Math.E*0.5, ((-(stufe-1)*0.8)+12))-11;
 			
 			g.setColor(Color.WHITE);
+			länge = Math.pow(Math.E*0.5, ((-(stufe-1)*0.8)+12))-11;
 			peano (stufe,1,(Graphics2D)g.create());
 			
 			count();
 			
-			
 			Timer timer = new Timer(zeit, new AbstractAction() {
 			    @Override
 			    public void actionPerformed(ActionEvent ae) {
+			    	
 			    	timer();
 			    }
 			});
