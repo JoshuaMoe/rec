@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -41,10 +40,6 @@ public class rec extends JFrame{
 	int width = gd.getDisplayMode().getWidth();
 	int height = gd.getDisplayMode().getHeight();
 	
-	
-	
-	//Um mit einem bestimmten zu beginnen den gewünschten auf wahr setzen 
-	//Wenn der zufall ausgeschlossen werden soll einfach next auskommentieren
 	boolean koch = false;
 	boolean kochf = false;
 	boolean levyc = false;
@@ -54,7 +49,6 @@ public class rec extends JFrame{
 	boolean peano = false;
 	boolean pfeil = false;
 	boolean sierpinski = false;
-	boolean pp = false;
 	boolean pause = false;
 	boolean mouseclicked= false;
 	
@@ -67,7 +61,6 @@ public class rec extends JFrame{
 	JButton btnpeano;
 	JButton btnpfeil;
 	JButton btnsierpinski;
-	JButton btnpp;
 	JButton btnpause;
 	JButton btnnext;
 	JButton btnprevious;
@@ -234,16 +227,6 @@ public class rec extends JFrame{
 			}
 		});
 		
-		btnpp = new JButton("Penta Plexity simulieren WIP");
-		btnpp.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				pp = true;
-				btn_v();
-				repaint();
-			}
-		});
-		
 		btnpause = new JButton("Pause");
 		btnpause.addActionListener(new ActionListener() {
 			@Override
@@ -274,8 +257,8 @@ public class rec extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(pause) {
-					if (stufe +1 == limit) stufe = 0;
 					stufe++;
+					if (stufe == limit) stufe = 1;
 					repaint();
 				}
 			}
@@ -310,7 +293,6 @@ public class rec extends JFrame{
 				peano = false;
 				pfeil = false;
 				sierpinski = false;
-				pp = false;
 				pause = false;
 				
 				btndrachen.setVisible(true);
@@ -322,7 +304,6 @@ public class rec extends JFrame{
 				btnpeano.setVisible(true);
 				btnpfeil.setVisible(true);
 				btnsierpinski.setVisible(true);
-				btnpp.setVisible(true);
 				
 				btnpause.setVisible(false);
 				btnback.setVisible(false);
@@ -352,8 +333,6 @@ public class rec extends JFrame{
 		contentPane.add(btnsierpinski);
 		btnkochf.setBounds(10,330,200,30);
 		contentPane.add(btnkochf);
-		btnpp.setBounds(10,370,200,30);
-		contentPane.add(btnpp);
 		btnpause.setBounds(10,10,200,30);
 		contentPane.add(btnpause);
 		btnnext.setBounds(10,50,200,30);
@@ -380,7 +359,6 @@ public class rec extends JFrame{
 		btnpeano.setVisible(false);
 		btnpfeil.setVisible(false);
 		btnsierpinski.setVisible(false);
-		btnpp.setVisible(false);
 		btnpause.setVisible(true);
 		btnback.setVisible(true);
 		text.setVisible(true);
@@ -392,6 +370,7 @@ public class rec extends JFrame{
 	
 	public void paint (Graphics g){
 		super.paintComponents(g);
+		
 		if(koch || kochf){
 			koch_animation ((Graphics2D)g.create());
 		}
@@ -426,47 +405,7 @@ public class rec extends JFrame{
 			
 		}
 		
-		if (pp){
-			pp(2,(Graphics2D) g.create(),(Graphics2D) g.create());
-		}
-		
 	}
-	
-	public void pp (int tiefe, Graphics2D g,Graphics2D g3){
-		g.setColor(Color.WHITE);
-		if (tiefe == 0){
-			g.drawLine(x, y, (int) (x+Math.round(länge)), y);
-			g.translate(länge,0);
-			g.rotate(Math.toRadians(-72), x, y);
-			g.drawLine(x, y, (int) (x+Math.round(länge)), y);
-			g.translate(länge,0);
-			g.rotate(Math.toRadians(-72), x, y);
-			g.drawLine(x, y, (int) (x+Math.round(länge)), y);
-			g.translate(länge,0);
-			g.rotate(Math.toRadians(-72), x, y);
-			g.drawLine(x, y, (int) (x+Math.round(länge)), y);
-			g.translate(länge,0);
-			g.rotate(Math.toRadians(-72), x, y);
-			g.drawLine(x, y, (int) (x+Math.round(länge)), y);
-			g.translate(länge,0);
-		}else{
-			pp(tiefe-1,g,g3);
-			g.rotate(Math.toRadians(-72), x, y);
-			pp(tiefe-1,g,g3);
-			g.rotate(Math.toRadians(-72), x, y);
-			pp(tiefe-1,g,g3);
-			g.rotate(Math.toRadians(-180), x, y);
-			pp(tiefe-1,g,g3);
-			g.rotate(Math.toRadians(36), x, y);
-			pp(tiefe-1,g,g3);
-			g.rotate(Math.toRadians(-72), x, y);
-			pp(tiefe-1,g,g3);
-			
-		}
-	}
-	
-	
-	
 	
 	public void sier_animation (Graphics2D g){
 		
@@ -550,7 +489,6 @@ public class rec extends JFrame{
 		limit = 6;
 		
 		if (stufe==1){
-			//länge = (int) Math.pow(Math.E/1.4, (-stufe*1.1+7));
 			länge = 20;
 			zeit = zeitanfang;
 		}
@@ -596,9 +534,6 @@ public class rec extends JFrame{
 		}
 		
 		if(pbaum){
-			
-			
-			länge = Math.pow(Math.E*0.01, ((-stufe*0.1)-0.5))+40;
 			länge = (Math.pow(0.9, stufe))*300+1;
 			
 			if (nextX != 0||nextY != 0) {
@@ -1026,41 +961,6 @@ public class rec extends JFrame{
 		}
 	}
 	
-	public void next (){
-		
-		stufe=1;
-		
-		koch = false;
-		levyc = false;
-		hilbert = false;
-		drachen = false;
-		pbaum = false;
-		peano = false;
-		pfeil = false;
-		
-		double rand = ThreadLocalRandom.current().nextDouble(0, 1);
-		
-		//double rand = Math.random();
-		System.out.println(rand +"");
-		
-		if(rand<=0.15){
-			koch = true;
-		}else if (rand<=0.3){
-			levyc = true;
-		}else if (rand<=0.45){
-			hilbert = true;
-		}else if (rand<=0.6){
-			drachen = true;
-		}else if (rand<=0.75){
-			pbaum = true;
-		}else if (rand<=0.9){
-			pfeil = true;
-		}else if (rand<=1){
-			peano = true;
-		}
-		repaint();
-	}
-	
 	public void timer () {
 		zeit = zeit+verzögerung;
 		if (!pause) {
@@ -1080,15 +980,3 @@ public class rec extends JFrame{
 	}
 	
 }
-
-class DrawPanel extends JPanel {
-	private static final long serialVersionUID = 1L;
-	public DrawPanel(){
-	}
-	public void paintComponent(Graphics g){
-	}
-}
-
-
-		
-
