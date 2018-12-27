@@ -11,21 +11,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.WindowConstants;
 
 public class rec extends JFrame{
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	public static JFrame frame = new JFrame();
 	public static JPanel contentPane;
@@ -45,10 +40,6 @@ public class rec extends JFrame{
 	int width = gd.getDisplayMode().getWidth();
 	int height = gd.getDisplayMode().getHeight();
 	
-	
-	
-	//Um mit einem bestimmten zu beginnen den gewünschten auf wahr setzen 
-	//Wenn der zufall ausgeschlossen werden soll einfach next auskommentieren
 	boolean koch = false;
 	boolean kochf = false;
 	boolean levyc = false;
@@ -58,7 +49,8 @@ public class rec extends JFrame{
 	boolean peano = false;
 	boolean pfeil = false;
 	boolean sierpinski = false;
-	boolean pp = false;
+	boolean pause = false;
+	boolean mouseclicked= false;
 	
 	JButton btnkoch;
 	JButton btnkochf;
@@ -69,7 +61,9 @@ public class rec extends JFrame{
 	JButton btnpeano;
 	JButton btnpfeil;
 	JButton btnsierpinski;
-	JButton btnpp;
+	JButton btnpause;
+	JButton btnnext;
+	JButton btnprevious;
 	JButton btnback;
 	
 	JTextArea text = new JTextArea();
@@ -83,18 +77,12 @@ public class rec extends JFrame{
 					rec frame = new rec();
 					frame.setVisible(true);
 					frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+					frame.setTitle("Grafische Recursion");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
-		
-		/*DrawPanel draw = new DrawPanel();
-		draw.setBackground(Color.black);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().add(draw);
-		frame.setSize(1550, 800);
-		frame.setVisible(true);*/
 		
 	}
 	
@@ -106,7 +94,7 @@ public class rec extends JFrame{
 		contentPane.setLayout(null);
 		contentPane.setBackground(Color.BLACK);
 		
-		text.setBounds(10,40,400,60);
+		text.setBounds(10,80,400,60);
 		contentPane.add(text);
 		Font font1 = new Font("SansSerif", Font.BOLD, 20);
 		text.setFont(font1);
@@ -118,8 +106,13 @@ public class rec extends JFrame{
 		contentPane.addMouseListener(new MouseListener() {
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
+		    	mouseclicked = true;
 		    	nextX =  e.getX();
 		    	nextY =  e.getY();
+		    	
+		    	if(pause) {
+		    		repaint();
+		    	}
 		    }
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -234,17 +227,56 @@ public class rec extends JFrame{
 			}
 		});
 		
-		btnpp = new JButton("Penta Plexity simulieren WIP");
-		btnpp.addActionListener(new ActionListener() {
+		btnpause = new JButton("Pause");
+		btnpause.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				pp = true;
-				btn_v();
-				repaint();
+				pause = !pause;
+				if (pause) {
+					btnpause.setBounds(10,10,200,30);
+					btnback.setBounds(10,130,200,30);
+					text.setBounds(10,160,400,60);
+					btnpause.setText("Resume");
+					btnnext.setVisible(true);
+					btnprevious.setVisible(true);
+				}
+				if (!pause) {
+					btnpause.setBounds(10,10,200,30);
+					btnback.setBounds(10,50,200,30);
+					text.setBounds(10,80,400,60);
+					btnpause.setText("Pause");
+					btnnext.setVisible(false);
+					btnprevious.setVisible(false);
+					repaint();
+				}
 			}
 		});
 		
-		btnback = new JButton("Zurück");
+		btnnext = new JButton("Nächster");
+		btnnext.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(pause) {
+					stufe++;
+					if (stufe == limit) stufe = 1;
+					repaint();
+				}
+			}
+		});
+		
+		btnprevious = new JButton("Vorheriger");
+		btnprevious.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(pause) {
+					stufe--;
+					if (stufe == 0) stufe = limit-1;
+					repaint();
+				}
+			}
+		});
+		
+		btnback = new JButton("Zurück zur Auswahl");
 		btnback.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -261,7 +293,7 @@ public class rec extends JFrame{
 				peano = false;
 				pfeil = false;
 				sierpinski = false;
-				pp = false;
+				pause = false;
 				
 				btndrachen.setVisible(true);
 				btnhilbert.setVisible(true);
@@ -272,9 +304,11 @@ public class rec extends JFrame{
 				btnpeano.setVisible(true);
 				btnpfeil.setVisible(true);
 				btnsierpinski.setVisible(true);
-				btnpp.setVisible(true);
 				
+				btnpause.setVisible(false);
 				btnback.setVisible(false);
+				btnnext.setVisible(false);
+				btnprevious.setVisible(false);
 				text.setVisible(false);
 				repaint();
 			}
@@ -299,10 +333,19 @@ public class rec extends JFrame{
 		contentPane.add(btnsierpinski);
 		btnkochf.setBounds(10,330,200,30);
 		contentPane.add(btnkochf);
-		btnpp.setBounds(10,370,200,30);
-		contentPane.add(btnpp);
-		btnback.setBounds(10,10,200,30);
+		btnpause.setBounds(10,10,200,30);
+		contentPane.add(btnpause);
+		btnnext.setBounds(10,50,200,30);
+		contentPane.add(btnnext);
+		btnprevious.setBounds(10,90,200,30);
+		contentPane.add(btnprevious);
+		btnback.setBounds(10,50,200,30);
 		contentPane.add(btnback);
+		
+		btnpause.setVisible(false);
+		btnback.setVisible(false);
+		btnnext.setVisible(false);
+		btnprevious.setVisible(false);
 	}
 	
 	public void btn_v (){
@@ -316,9 +359,13 @@ public class rec extends JFrame{
 		btnpeano.setVisible(false);
 		btnpfeil.setVisible(false);
 		btnsierpinski.setVisible(false);
-		btnpp.setVisible(false);
+		btnpause.setVisible(true);
 		btnback.setVisible(true);
 		text.setVisible(true);
+		btnpause.setText("Pause");
+		btnpause.setBounds(10,10,200,30);
+		btnback.setBounds(10,50,200,30);
+		text.setBounds(10,80,400,60);
 	}
 	
 	public void paint (Graphics g){
@@ -358,47 +405,7 @@ public class rec extends JFrame{
 			
 		}
 		
-		if (pp){
-			pp(2,(Graphics2D) g.create(),(Graphics2D) g.create());
-		}
 	}
-	
-	public void pp (int tiefe, Graphics2D g,Graphics2D g3){
-		g.setColor(Color.WHITE);
-		if (tiefe == 0){
-			Graphics2D g2 = (Graphics2D) g.create();
-			g2.drawLine(x, y, (int) (x+Math.round(länge)), y);
-			x+=länge;
-			g2.rotate(Math.toRadians(-72), x, y);
-			g2.drawLine(x, y, (int) (x+Math.round(länge)), y);
-			x+=länge;
-			g2.rotate(Math.toRadians(-72), x, y);
-			g2.drawLine(x, y, (int) (x+Math.round(länge)), y);
-			x+=länge;
-			g2.rotate(Math.toRadians(-72), x, y);
-			g2.drawLine(x, y, (int) (x+Math.round(länge)), y);
-			x+=länge;
-			g2.rotate(Math.toRadians(-72), x, y);
-			g2.drawLine(x, y, (int) (x+Math.round(länge)), y);
-			x+=länge;
-		}else{
-			pp(tiefe-1,g,g3);
-			g.rotate(Math.toRadians(-72), x, y);
-			pp(tiefe-1,g,g3);
-			g.rotate(Math.toRadians(-72), x, y);
-			pp(tiefe-1,g,g3);
-			g.rotate(Math.toRadians(-180), x, y);
-			pp(tiefe-1,g,g3);
-			g.rotate(Math.toRadians(36), x, y);
-			pp(tiefe-1,g,g3);
-			g.rotate(Math.toRadians(-72), x, y);
-			pp(tiefe-1,g,g3);
-			
-		}
-	}
-	
-	
-	
 	
 	public void sier_animation (Graphics2D g){
 		
@@ -410,10 +417,8 @@ public class rec extends JFrame{
 		}
 		
 		if(sierpinski){
-			//Da die Kurve größer wird muss sie in X und Y Richtung in Abhängigkeit von der Tiefe oder Stufe verschoben werden
 			
-			if (nextX != 0||nextY != 0) 
-			{
+			if (nextX != 0||nextY != 0) {
 				x = nextX;
 				y = nextY;
 			}else {
@@ -422,7 +427,7 @@ public class rec extends JFrame{
 			}
 			
 			counter = 0;
-			länge = 20;//(Math.pow(0.6, i))*900;
+			länge = 20;
 			
 			g.setColor(Color.WHITE);
 			sierpinski(stufe,false,(Graphics2D) g.create());
@@ -432,13 +437,7 @@ public class rec extends JFrame{
 			Timer timer = new Timer(zeit, new AbstractAction() {
 			    @Override
 			    public void actionPerformed(ActionEvent ae) {
-			    	zeit = zeit+verzögerung;
-					
-					if (stufe+1==limit){
-						stufe = 0;
-					}
-					stufe++;
-					repaint();
+			    	timer();
 			    }
 			});
 			timer.setRepeats(false);
@@ -450,15 +449,13 @@ public class rec extends JFrame{
 		
 		limit = 10;
 		
-		
 		if (stufe==1){
 			zeit = zeitanfang;
 		}
 		
 		if(pfeil){
 			
-			if (nextX != 0||nextY != 0) 
-			{
+			if (nextX != 0||nextY != 0) {
 				x = nextX;
 				y = nextY;
 			}else {
@@ -477,13 +474,7 @@ public class rec extends JFrame{
 			Timer timer = new Timer(zeit, new AbstractAction() {
 			    @Override
 			    public void actionPerformed(ActionEvent ae) {
-			    	zeit = zeit+verzögerung;
-					
-					if (stufe+1==limit){
-						stufe = 0;
-					}
-					stufe++;
-					repaint();
+			    	timer();
 			    }
 			});
 			timer.setRepeats(false);
@@ -497,17 +488,14 @@ public class rec extends JFrame{
 		
 		limit = 6;
 		
-		
 		if (stufe==1){
-			//länge = (int) Math.pow(Math.E/1.4, (-stufe*1.1+7));
 			länge = 20;
 			zeit = zeitanfang;
 		}
 		
 		if(peano){
 			
-			if (nextX != 0||nextY != 0) 
-			{
+			if (nextX != 0||nextY != 0) {
 				x = nextX;
 				y = nextY;
 			}else {
@@ -518,6 +506,7 @@ public class rec extends JFrame{
 			counter = 0;
 			
 			g.setColor(Color.WHITE);
+			länge = Math.pow(Math.E*0.5, ((-(stufe-1)*0.8)+12))-11;
 			peano (stufe,1,(Graphics2D)g.create());
 			
 			count();
@@ -525,14 +514,8 @@ public class rec extends JFrame{
 			Timer timer = new Timer(zeit, new AbstractAction() {
 			    @Override
 			    public void actionPerformed(ActionEvent ae) {
-			    	länge = Math.pow(Math.E*0.5, ((-stufe*0.8)+12))-11;
-			    	zeit = zeit+verzögerung;
-					
-					if (stufe+1==limit){
-						stufe = 0;
-					}
-					stufe++;
-					repaint();
+			    	
+			    	timer();
 			    }
 			});
 			timer.setRepeats(false);
@@ -543,24 +526,17 @@ public class rec extends JFrame{
 	
 	public void pbaum_animation (Graphics2D g){
 		
-		limit = 10;
-		
-		
+		limit = 10;		
 		
 		if (stufe==1){
-			//länge = (int) Math.pow(Math.E/1.4, (-stufe*1.1+7));
 			länge = 20;
 			zeit = zeitanfang;
 		}
 		
 		if(pbaum){
-			
-			
-			länge = Math.pow(Math.E*0.01, ((-stufe*0.1)-0.5))+40;
 			länge = (Math.pow(0.9, stufe))*300+1;
 			
-			if (nextX != 0||nextY != 0) 
-			{
+			if (nextX != 0||nextY != 0) {
 				x = nextX;
 				y = nextY;
 			}else {
@@ -577,13 +553,7 @@ public class rec extends JFrame{
 			Timer timer = new Timer(zeit, new AbstractAction() {
 			    @Override
 			    public void actionPerformed(ActionEvent ae) {
-			    	zeit = zeit+verzögerung;
-					
-					if (stufe+1==limit){
-						stufe = 0;
-					}
-					stufe++;
-					repaint();
+			    	timer();
 			    }
 			});
 			timer.setRepeats(false);
@@ -600,14 +570,12 @@ public class rec extends JFrame{
 		
 		
 		if (stufe==1){
-			//länge = (int) Math.pow(Math.E/1.4, (-stufe*1.1+7));
 			länge = 20;
 			zeit = zeitanfang;
 		}
 		
 		if(hilbert){
-			if (nextX != 0||nextY != 0) 
-			{
+			if (nextX != 0||nextY != 0) {
 				x = nextX;
 				y = nextY;
 			}else {
@@ -616,7 +584,6 @@ public class rec extends JFrame{
 			}
 			
 			counter = 0;
-			länge = 65/(stufe*2);
 			länge = (Math.pow(0.5, stufe))*500+1;
 			
 			g.setColor(Color.WHITE);
@@ -627,13 +594,7 @@ public class rec extends JFrame{
 			Timer timer = new Timer(zeit, new AbstractAction() {
 			    @Override
 			    public void actionPerformed(ActionEvent ae) {
-			    	zeit = zeit+verzögerung;
-					
-					if (stufe+1==limit){
-						stufe = 0;
-					}
-					stufe++;
-					repaint();
+			    	timer();
 			    }
 			});
 			timer.setRepeats(false);
@@ -647,15 +608,13 @@ public class rec extends JFrame{
 		limit = 15;
 		
 		if (stufe==1){
-			//länge = (int) Math.pow(Math.E/1.4, (-stufe*1.1+7));
 			länge = 100;
 			zeit = zeitanfang;
 		}
 		
 		if(drachen){
 			
-			if (nextX != 0||nextY != 0) 
-			{
+			if (nextX != 0||nextY != 0) {
 				x = nextX;
 				y = nextY;
 			}else {
@@ -677,13 +636,7 @@ public class rec extends JFrame{
 			Timer timer = new Timer(zeit, new AbstractAction() {
 			    @Override
 			    public void actionPerformed(ActionEvent ae) {
-			    	zeit = zeit+verzögerung;
-					
-					if (stufe+1==limit){
-						stufe = 0;
-					}
-					stufe++;
-					repaint();
+			    	timer();
 			    }
 			});
 			timer.setRepeats(false);
@@ -703,18 +656,15 @@ public class rec extends JFrame{
 		
 		if(koch || kochf){
 			
-			if (nextX != 0||nextY != 0) 
-			{
+			if (nextX != 0||nextY != 0) {
 				x = nextX;
 				y = nextY;
 			}else {
-				x = 200;
-				y = 600;
+				x = width/4;
+				y = height*3/4;
 			}
 			
 			counter = 0;
-			
-			länge = 50/(stufe*3);
 			länge = (Math.pow(0.33333333333, stufe))*2000+1;
 			
 			g.setColor(Color.WHITE);
@@ -722,8 +672,13 @@ public class rec extends JFrame{
 			if (koch) koch(stufe,(Graphics2D)g.create());
 			
 			if(kochf) {
-				x = 400;
-				y = 400;
+				if (nextX != 0||nextY != 0) {
+					x = nextX;
+					y = nextY;
+				}else {
+					x = width/2;
+					y = height/2;
+				}
 				länge = (Math.pow(0.33333333333, stufe))*1000+1;
 				int x2 = (int) ( ((Math.pow(1.33333333333, 1))*245+1)+(Math.pow(0.5*Math.E,stufe*1.5)*5));
 				koch(stufe,(Graphics2D)g.create());
@@ -740,13 +695,7 @@ public class rec extends JFrame{
 			Timer timer = new Timer(zeit, new AbstractAction() {
 			    @Override
 			    public void actionPerformed(ActionEvent ae) {
-			    	zeit = zeit+verzögerung;
-					
-					if (stufe+1==limit){
-						stufe = 0;
-					}
-					stufe++;
-					repaint();
+			    	timer();
 			    }
 			});
 			timer.setRepeats(false);
@@ -757,8 +706,7 @@ public class rec extends JFrame{
 	
 	public void levyc_animation (Graphics2D g){
 		
-		limit = 19;//16 springt nicht hin und her
-		
+		limit = 19;
 		
 		if (stufe==1){
 			länge = 100;
@@ -767,8 +715,7 @@ public class rec extends JFrame{
 		
 		if (levyc){
 			
-			if (nextX != 0||nextY != 0) 
-			{
+			if (nextX != 0||nextY != 0) {
 				x = nextX;
 				y = nextY;
 			}else {
@@ -776,8 +723,6 @@ public class rec extends JFrame{
 				y = height/2;
 			}
 			
-
-			länge = 100/(stufe*1.45);
 			länge = (Math.pow(0.68965517241, stufe))*500+1;
 			
 			counter = 0;
@@ -789,13 +734,7 @@ public class rec extends JFrame{
 			Timer timer = new Timer(zeit, new AbstractAction() {
 			    @Override
 			    public void actionPerformed(ActionEvent ae) {
-			    	zeit = zeit+verzögerung;
-					
-					if (stufe+1==limit){
-						stufe = 0;
-					}
-					stufe++;
-					repaint();
+			    	timer();
 			    }
 			});
 			timer.setRepeats(false);
@@ -1022,58 +961,22 @@ public class rec extends JFrame{
 		}
 	}
 	
-	public void next (){
-		
-		stufe=1;
-		
-		koch = false;
-		levyc = false;
-		hilbert = false;
-		drachen = false;
-		pbaum = false;
-		peano = false;
-		pfeil = false;
-		
-		double rand = ThreadLocalRandom.current().nextDouble(0, 1);
-		
-		//double rand = Math.random();
-		System.out.println(rand +"");
-		
-		if(rand<=0.15){
-			koch = true;
-		}else if (rand<=0.3){
-			levyc = true;
-		}else if (rand<=0.45){
-			hilbert = true;
-		}else if (rand<=0.6){
-			drachen = true;
-		}else if (rand<=0.75){
-			pbaum = true;
-		}else if (rand<=0.9){
-			pfeil = true;
-		}else if (rand<=1){
-			peano = true;
+	public void timer () {
+		zeit = zeit+verzögerung;
+		if (!pause) {
+			if (stufe+1==limit){
+				stufe = 0;
+			}
+			stufe++;
+			repaint();
 		}
-		repaint();
 	}
 	
 	
 	public void count() {
 		String s1 = "Stufe: "+stufe;
-		String s2 = "\n\rAnzahl der Linien:" +counter;
+		String s2 = "\n\rAnzahl der Linien: " +counter;
 		text.setText(s1+s2);
 	}
 	
 }
-
-class DrawPanel extends JPanel {
-	private static final long serialVersionUID = 1L;
-	public DrawPanel(){
-	}
-	public void paintComponent(Graphics g){
-	}
-}
-
-
-		
-
